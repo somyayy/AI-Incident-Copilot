@@ -21,36 +21,13 @@ AI Incident Co-Pilot is a Generative AI-powered platform that assists Site Relia
 
 ## 🛠 Tech Stack
 
-### Backend
-
-* Python
-* FastAPI
-
-### Generative AI
-
-* Large Language Models (LLMs)
-* Retrieval-Augmented Generation (RAG)
-* Prompt Engineering
-* Embedding Models
-
-### Database
-
-* PostgreSQL
-
-### Vector Store
-
-* ChromaDB (or FAISS)
-
-### DevOps
-
-* Docker
-* GitHub Actions
-
-### Tools
-
-* Git
-* Postman
-* PyTest
+**Backend:** Python, FastAPI
+**Generative AI:** LangChain, OpenAI GPT-4 / GPT-4o-mini, Prompt Engineering, Embedding Models
+**Database:** PostgreSQL
+**Vector Store:** FAISS
+**Cache:** Redis
+**DevOps:** Docker, GitHub Actions
+**Tools:** Git, Postman, PyTest
 
 ---
 
@@ -60,25 +37,26 @@ AI Incident Co-Pilot is a Generative AI-powered platform that assists Site Relia
 AI-Incident-CoPilot/
 │
 ├── app/
-│   ├── api/
-│   ├── services/
-│   ├── rag/
-│   ├── llm/
-│   ├── database/
-│   ├── models/
-│   ├── schemas/
-│   ├── utils/
+│   ├── api/            # FastAPI route handlers
+│   ├── services/        # Business logic orchestration
+│   ├── rag/              # Embeddings + FAISS retriever
+│   ├── llm/               # LangChain LLM client + prompts
+│   ├── database/       # SQLAlchemy engine/session
+│   ├── models/           # ORM models
+│   ├── schemas/         # Pydantic request/response schemas
+│   ├── utils/             # Logging etc.
 │   └── main.py
 │
 ├── data/
 │   ├── incidents/
 │   └── knowledge_base/
 │
-├── embeddings/
+├── embeddings/            # Persisted FAISS index
 ├── tests/
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
+├── pytest.ini
 └── README.md
 ```
 
@@ -100,7 +78,7 @@ AI-Incident-CoPilot/
 Embedding Generation          PostgreSQL Database
       │
       ▼
- Vector Database
+ FAISS Vector Store
       │
       ▼
 Relevant Incident Retrieval
@@ -116,128 +94,37 @@ Relevant Incident Retrieval
 
 ## 📋 Core Functionalities
 
-### Incident Analysis
-
-* Analyse production incidents
-* Identify probable root causes
-* Generate incident summaries
-* Suggest remediation steps
-
-### Knowledge Retrieval
-
-* Retrieve similar historical incidents
-* Search operational documentation
-* Use contextual information with RAG
-
-### AI Assistance
-
-* Explain technical errors
-* Recommend debugging workflow
-* Generate postmortem reports
-* Answer incident-related queries
-
-### Incident Management
-
-* Store incident history
-* Categorise incidents by severity
-* Track investigation status
-* Search previous incidents
-
----
-
-## ⚡ AI Pipeline
-
-```text
-Incident Report
-       │
-       ▼
-Text Preprocessing
-       │
-       ▼
-Embedding Generation
-       │
-       ▼
-Vector Database Search
-       │
-       ▼
-Retrieve Similar Incidents
-       │
-       ▼
-LLM + Retrieved Context
-       │
-       ▼
-Root Cause Analysis
-       │
-       ▼
-Suggested Resolution
-       │
-       ▼
-Postmortem Summary
-```
-
----
-
-## ⚡ Performance Optimisations
-
-* Retrieval-Augmented Generation for factual responses
-* Semantic similarity search using embeddings
-* Prompt optimisation for consistent outputs
-* Database indexing for faster retrieval
-* Modular FastAPI architecture
-* Docker-based deployment
-* Efficient API response handling
+**Incident Analysis** — analyse incidents, identify root causes, generate summaries, suggest remediation.
+**Knowledge Retrieval** — retrieve similar historical incidents via FAISS similarity search.
+**AI Assistance** — explain errors, generate postmortems, answer incident queries.
+**Incident Management** — store, categorise by severity, track status, search history.
 
 ---
 
 ## 🧪 Running the Project
 
-### Clone Repository
+### Option A: Docker (recommended)
 
 ```bash
 git clone https://github.com/yourusername/AI-Incident-CoPilot.git
-
 cd AI-Incident-CoPilot
+cp .env.example .env   # then fill in OPENAI_API_KEY
+docker-compose up --build
 ```
 
-### Create Virtual Environment
+Visit `http://localhost:8000/docs` for interactive API docs.
+
+### Option B: Local virtualenv
 
 ```bash
 python -m venv venv
-
 source venv/bin/activate
-```
-
-### Install Dependencies
-
-```bash
 pip install -r requirements.txt
-```
-
-### Configure Environment Variables
-
-```text
-OPENAI_API_KEY=your_api_key
-DATABASE_URL=postgresql://...
-VECTOR_DB_PATH=./embeddings
-```
-
-### Run the Application
-
-```bash
+cp .env.example .env   # then fill in OPENAI_API_KEY and a local DATABASE_URL
 uvicorn app.main:app --reload
 ```
 
-Visit:
-
-```text
-http://localhost:8000/docs
-```
-
-for interactive API documentation.
-
----
-
-## 🧪 Testing
+### Testing
 
 ```bash
 pytest
@@ -245,25 +132,23 @@ pytest
 
 ---
 
+## 📡 API Endpoints
+
+| Method | Endpoint                          | Description                              |
+|--------|------------------------------------|-------------------------------------------|
+| POST   | `/incidents`                       | Create a new incident                     |
+| GET    | `/incidents`                       | List incidents                            |
+| GET    | `/incidents/{id}`                  | Get a single incident                     |
+| POST   | `/incidents/{id}/analyze`          | Run RAG + LLM root cause analysis         |
+| POST   | `/incidents/{id}/postmortem`       | Generate an AI postmortem summary         |
+
+---
+
 ## 📈 Example Workflow
 
 ```text
-Engineer Reports Incident
-            │
-            ▼
-Incident Stored
-            │
-            ▼
-Retrieve Similar Cases
-            │
-            ▼
-LLM Generates RCA
-            │
-            ▼
-Suggest Resolution
-            │
-            ▼
-Generate Postmortem
+Engineer Reports Incident → Incident Stored → Retrieve Similar Cases
+    → LLM Generates RCA → Suggest Resolution → Generate Postmortem
 ```
 
 ---
@@ -281,27 +166,10 @@ Generate Postmortem
 
 ---
 
-## 🎯 Project Highlights
-
-* Built with FastAPI and Generative AI
-* Retrieval-Augmented Generation (RAG) architecture
-* Semantic search using vector embeddings
-* AI-generated Root Cause Analysis
-* Automated incident summarisation
-* Context-aware troubleshooting recommendations
-* Modular, scalable backend design
-* Docker-ready deployment
-
----
-
 ## 👨‍💻 Author
 
 **Somya Das**
-
-Computer Science & Business Systems
-BMS College of Engineering
-
----
+Computer Science & Business Systems, BMS College of Engineering
 
 ## 📄 License
 
