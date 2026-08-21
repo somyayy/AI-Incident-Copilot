@@ -1,6 +1,6 @@
 # AI Incident Co-Pilot – Intelligent Incident Response Assistant
 
-AI Incident Co-Pilot is a Generative AI-powered platform that assists Site Reliability Engineers (SREs) and DevOps teams in diagnosing, analysing, and resolving production incidents. By combining Large Language Models (LLMs), Retrieval-Augmented Generation (RAG), and historical incident knowledge, the platform provides root cause analysis, troubleshooting guidance, and automated remediation suggestions in real time
+AI Incident Co-Pilot is a Generative AI-powered platform that assists Site Reliability Engineers (SREs) and DevOps teams in diagnosing, analysing, and resolving production incidents. By combining Large Language Models (LLMs), Retrieval-Augmented Generation (RAG), and historical incident knowledge, the platform provides root cause analysis, troubleshooting guidance, and automated remediation suggestions in real time.
 
 ---
 
